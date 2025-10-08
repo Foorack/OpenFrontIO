@@ -6,6 +6,7 @@ import { GameUpdateType } from "../../../core/game/GameUpdates";
 import { GameView } from "../../../core/game/GameView";
 import { UserSettings } from "../../../core/game/UserSettings";
 import { AlternateViewEvent, RefreshGraphicsEvent } from "../../InputHandler";
+import { setIntentionalNavigation } from "../../Main";
 import { PauseGameEvent } from "../../Transport";
 import { translateText } from "../../Utils";
 import { Layer } from "./Layer";
@@ -80,6 +81,8 @@ export class OptionsMenu extends LitElement implements Layer {
       );
       if (!isConfirmed) return;
     }
+    // Set flag to prevent beforeunload confirmation
+    setIntentionalNavigation();
     // redirect to the home page
     window.location.href = "/";
   }

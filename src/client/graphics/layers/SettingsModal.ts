@@ -13,6 +13,7 @@ import musicIcon from "../../../../resources/images/music.svg";
 import { EventBus } from "../../../core/EventBus";
 import { UserSettings } from "../../../core/game/UserSettings";
 import { AlternateViewEvent, RefreshGraphicsEvent } from "../../InputHandler";
+import { setIntentionalNavigation } from "../../Main";
 import { PauseGameEvent } from "../../Transport";
 import { translateText } from "../../Utils";
 import SoundManager from "../../sound/SoundManager";
@@ -152,6 +153,8 @@ export class SettingsModal extends LitElement implements Layer {
   }
 
   private onExitButtonClick() {
+    // Set flag to prevent beforeunload confirmation
+    setIntentionalNavigation();
     // redirect to the home page
     window.location.href = "/";
   }
