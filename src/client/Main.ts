@@ -82,6 +82,7 @@ export interface JoinLobbyEvent {
 class Client {
   private gameStop: (() => boolean) | null = null;
   private eventBus: EventBus = new EventBus();
+  private isIntentionalNavigation = false;
 
   private usernameInput: UsernameInput | null = null;
   private flagInput: FlagInput | null = null;
@@ -154,9 +155,13 @@ class Client {
     this.publicLobby = document.querySelector("public-lobby") as PublicLobby;
 
     window.addEventListener("beforeunload", (e) => {
+      // Don't show confirmation if user is intentionally navigating away
+      if (this.isIntentionalNavigation) {
+        return;
+      }
       if (this.gameStop && !this.gameStop()) {
         e.preventDefault();
-        e.returnValue = '';
+        e.returnValue = "";
         return "";
       }
       console.log("Browser is closing");
@@ -493,6 +498,7 @@ class Client {
       }
     }
     if (decodedHash.startsWith("#refresh")) {
+      setIntentionalNavigation();
       window.location.href = "/";
     }
   }
@@ -609,12 +615,27 @@ class Client {
       this.eventBus.emit(new SendKickPlayerIntentEvent(target));
     }
   }
+
+  public setIntentionalNavigation() {
+    this.isIntentionalNavigation = true;
+  }
 }
+
+// Store the client instance globally so it can be accessed by other components
+let clientInstance: Client | null = null;
 
 // Initialize the client when the DOM is loaded
 document.addEventListener("DOMContentLoaded", () => {
-  new Client().initialize();
+  clientInstance = new Client();
+  clientInstance.initialize();
 });
+
+// Export function to set intentional navigation flag
+export function setIntentionalNavigation() {
+  if (clientInstance) {
+    clientInstance.setIntentionalNavigation();
+  }
+}
 
 // WARNING: DO NOT EXPOSE THIS ID
 function getPlayToken(): string {

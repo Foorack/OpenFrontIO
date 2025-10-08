@@ -12,6 +12,7 @@ import {
   patternRelationship,
 } from "../../Cosmetics";
 import { getUserMe } from "../../jwt";
+import { setIntentionalNavigation } from "../../Main";
 import { SendWinnerEvent } from "../../Transport";
 import { Layer } from "./Layer";
 
@@ -208,6 +209,8 @@ export class WinModal extends LitElement implements Layer {
 
   private _handleExit() {
     this.hide();
+    // Set flag to prevent beforeunload confirmation
+    setIntentionalNavigation();
     window.location.href = "/";
   }
 

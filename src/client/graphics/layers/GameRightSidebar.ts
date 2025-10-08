@@ -10,6 +10,7 @@ import { EventBus } from "../../../core/EventBus";
 import { GameType } from "../../../core/game/Game";
 import { GameUpdateType } from "../../../core/game/GameUpdates";
 import { GameView } from "../../../core/game/GameView";
+import { setIntentionalNavigation } from "../../Main";
 import { PauseGameEvent } from "../../Transport";
 import { translateText } from "../../Utils";
 import { Layer } from "./Layer";
@@ -94,6 +95,8 @@ export class GameRightSidebar extends LitElement implements Layer {
       );
       if (!isConfirmed) return;
     }
+    // Set flag to prevent beforeunload confirmation
+    setIntentionalNavigation();
     // redirect to the home page
     window.location.href = "/";
   }
